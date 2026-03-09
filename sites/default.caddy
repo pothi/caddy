@@ -1,0 +1,13 @@
+# default handler
+:80 {
+    respond 404 {
+        body "Error code: 404.1 - Site Not Found"
+    }
+
+    # optional logging - safe to ignore
+	log {
+		output file /var/log/caddy/default-access.json
+	}
+}
+
+

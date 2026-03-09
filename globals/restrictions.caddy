@@ -1,0 +1,15 @@
+@forbidden_files {
+    file
+    path *.env .envrc */.* *.bak *~ /.htaccess /.htpasswd /.user.ini *.sqlite
+}
+respond @forbidden_files "Forbidden" 403
+
+@forbidden_folders {
+    path /.git/
+}
+respond @forbidden_folders "Forbidden" 403
+
+# if certbot is used to get/renew certificates
+handle /.well-known/acme-challenge/* {
+    file_server
+}

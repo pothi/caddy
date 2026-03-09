@@ -1,0 +1,17 @@
+# WARNING: only use if you understand the implications!
+# source - https://caddyserver.com/docs/caddyfile/directives/header
+
+header {
+	# disable FLoC tracking
+	Permissions-Policy interest-cohort=()
+
+	# enable HSTS
+	Strict-Transport-Security max-age=31536000;
+
+	# disable clients from sniffing the media type
+	X-Content-Type-Options nosniff
+
+	# clickjacking protection
+	X-Frame-Options SAMEORIGIN
+}
+

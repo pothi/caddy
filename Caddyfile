@@ -1,0 +1,42 @@
+{
+    # https://caddyserver.com/docs/caddyfile/options#metrics
+    # metrics {
+        # per_host
+    # }
+
+    # https://caddyserver.com/docs/caddyfile/options#debug
+    # debug
+
+    # logging
+    log default {
+        output file /var/log/caddy/main.log
+
+        # the only log for which `console` format fits more precisely.
+        # if you prefer json, just comment it out.
+        format console
+    }
+
+    # https://caddyserver.com/docs/caddyfile/options#timeouts
+	servers {
+		timeouts {
+			read_body   10s
+			read_header 5s
+			write       30s
+			idle        10m
+		}
+
+        # Cloudflare support
+        # safe to keep it even if the site isn't behind Cloudflare proxy
+        import /etc/caddy/globals/cloudflare.caddy
+	}
+
+}
+
+# import common code snippets
+import /etc/caddy/globals/snippets.caddy
+
+# configure wildcard domains before using individual domains
+# import /etc/caddy/globals/wildcard-example.com.caddy-sample
+
+# sites
+import /etc/caddy/sites/*.caddy

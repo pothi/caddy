@@ -1,0 +1,7 @@
+*.example.com {
+    tls {
+        dns <provider> ...
+        # example
+        # dns cloudflare YOUR_CLOUDFLARE_API_TOKEN
+    }
+}

@@ -1,0 +1,15 @@
+(wp_cache_rules) {
+    not header_regexp Cookie "comment_author|wordpress_[a-f0-9]+|wp-postpass|wordpress_logged_in"
+    not path_regexp "(/wp-admin/|/xmlrpc.php|/wp-(app|cron|login|register|mail).php|wp-.*.php|/feed/|index.php|wp-comments-popup.php|wp-links-opml.php|wp-locations.php|sitemap(index)?.xml|[a-z0-9-]+-sitemap([0-9]+)?.xml)"
+    not method POST
+    not expression {query} != ''
+}
+
+(assets_cache_control) {
+    intercept @assets {
+        @static status 200
+        handle_response @static {
+            header Cache-Control "s-maxage=86400, max-age=31536000" # 31536000 means 1 year
+        }
+    }
+}

@@ -1,0 +1,15 @@
+# Let's have 1 year of expires headers
+@assets {
+    file
+    path *.ico *.css *.js *.gif *.webp *.avif *.jpg *.jpeg *.png *.svg *.woff *.woff2 *.otf
+}
+# header @assets Cache-Control "s-maxage=86400, max-age=31536000" # 31536000 - 1 year, 86400 - 1 day
+
+### to skip logging for above static assets - see alternative for more static content types
+
+# method #1
+log_skip @assets
+
+# method #2 - https://caddyserver.com/docs/caddyfile/directives/log_skip
+# @skip path_regexp \.(js|css|png|jpe?g|gif|ico|woff|otf|ttf|eot|svg|txt|pdf|docx?|xlsx?)$
+# log_skip @skip

@@ -1,0 +1,29 @@
+example.com, www.example.com {
+
+    root /home/user/sites/example.com/public
+
+    log {
+        output file /var/log/caddy/access-phpbb.json
+    }
+
+    encode
+
+    # php-fpm - 8.5
+    php_fastcgi unix//etc/projects/static-php-cli/run/php/fpm-85.sock
+
+    # result in an error - panic: Header called after Handler finished
+    # php_server
+
+    file_server {
+        index index.php index.html index.txt
+    }
+
+    import /etc/caddy/globals/assets.caddy              # to handle static files
+    import /etc/caddy/globals/restrictions.caddy        # to forbid secret files
+    import /etc/caddy/globals/security-headers.caddy    # use these with care
+
+    # phpBB specific restrictions
+    import /etc/caddy/globals/restrictions-phpbb.caddy
+}
+
+

@@ -1,0 +1,6 @@
+@forbidden_files_phpbb {
+    file
+    path *config.php *common.php
+}
+respond @forbidden_files_phpbb 'Forbidden' 403
+
