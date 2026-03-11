@@ -1,15 +1,33 @@
-# Let's have 1 year of expires headers
+# Handle cache-control for static content
+# 31536000 - 1 year, 86400 - 1 day
+
+# For proper handling on WP multisite. Works for normal sites too.
 @assets {
     file
     path *.ico *.css *.js *.gif *.webp *.avif *.jpg *.jpeg *.png *.svg *.woff *.woff2 *.otf
 }
-# header @assets Cache-Control "s-maxage=86400, max-age=31536000" # 31536000 - 1 year, 86400 - 1 day
+intercept @assets {
+    @static status 200
+    handle_response @static {
+        header Cache-Control "s-maxage=86400, max-age=31536000"
+    }
+}
+
+# Without the following, 404 is handled by PHP or any upstream proxy.
+@assets_404 {
+    not file
+    path *.ico *.css *.js *.gif *.webp *.avif *.jpg *.jpeg *.png *.svg *.woff *.woff2 *.otf
+}
+respond @assets_404 "Not Found" 404
+header @assets_404 Cache-Control "no-cache, must-revalidate, max-age=0, no-store, private"
 
 ### to skip logging for above static assets - see alternative for more static content types
 
 # method #1
 log_skip @assets
+log_skip @assets_404
 
 # method #2 - https://caddyserver.com/docs/caddyfile/directives/log_skip
 # @skip path_regexp \.(js|css|png|jpe?g|gif|ico|woff|otf|ttf|eot|svg|txt|pdf|docx?|xlsx?)$
 # log_skip @skip
+

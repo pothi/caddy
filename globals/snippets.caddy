@@ -4,12 +4,3 @@
     not method POST
     not expression {query} != ''
 }
-
-(assets_cache_control) {
-    intercept @assets {
-        @static status 200
-        handle_response @static {
-            header Cache-Control "s-maxage=86400, max-age=31536000" # 31536000 means 1 year
-        }
-    }
-}
