@@ -1,12 +1,15 @@
 #!/usr/bin/env fish
 
-set ver 1.0
+set ver 1.1
 
 # Install or update Caddy on macOS
 
 # Requirements: curl and jq
 
 # changelog
+# 1.1:
+#   - date: 2026-04-08
+#   - better output
 # i.0:
 #   - date: 2026-04-01
 #   - first version
@@ -117,6 +120,10 @@ test -f $downloads_dir/LICENSE; and rm $downloads_dir/LICENSE
 test -f $downloads_dir/README.md; and rm $downloads_dir/README.md
 
 echo
-echo Successfully {$action}d to version: $(caddy version)
+if test $action = 'install'
+    echo Successfully installed Caddy web server.
+else
+    echo Successfully updated to version: $(caddy version)
+end
 echo
 
