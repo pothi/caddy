@@ -13,6 +13,46 @@ intercept @assets {
     }
 }
 
+#-----------------------------------------------------#
+#--- Support for webp-uploads plugin for WordPress ---#
+#-----------------------------------------------------#
+
+# Do NOT use with a CDN such as Cloudflare free version.
+
+# 1. Capture the base path and extension (same as before)
+# @is_image path_regexp img ^(?P<base>.+)\.(?P<ext>png|jpg|jpeg)$
+
+# route @is_image {
+    # 2. Check for AVIF support and file existence
+    # @try_avif {
+        # header Accept *image/avif*
+        # file {re.img.base}-{re.img.ext}.avif
+    # }
+    # If AVIF works, rewrite and stop here for this request
+    # rewrite @try_avif {re.img.base}-{re.img.ext}.avif
+
+    # Check for WebP support and file existence
+    # @try_webp {
+        # header Accept *image/webp*
+        # file {re.img.base}-{re.img.ext}.webp
+    # }
+    # If WebP works (and AVIF didn't), rewrite here
+    # rewrite @try_webp {re.img.base}-{re.img.ext}.webp
+# }
+
+# the following is taken care by another snippet
+# Add this to ensure images are cached by browsers
+# header @is_image Cache-Control "public, max-age=31536000, must-revalidate"
+
+# Regex breakdown:
+# ^(?P<base>.+)    -> Capture everything from the start into 'base'
+# \.               -> The literal dot separator
+# (?P<ext>\w+)$    -> Capture the alphanumeric extension at the end
+
+#------------------#
+#--- Handle 404 ---#
+#------------------#
+
 # Without the following, 404 is handled by PHP or any upstream proxy.
 @assets_404 {
     not file
